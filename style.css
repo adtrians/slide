@@ -1,0 +1,118 @@
+/*
+  This is a JS based version of https://codepen.io/bramus/pen/xxRZZdK
+  It uses polyfills for css-typed-om and scroll-timeline
+
+  While it has some bugs on its own (it's not performant), it does render
+  the scroll timeline correctly. See bug 1 in CSS version for a description.
+*/
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --cover-size: 15rem;
+}
+
+@media (max-width: 800px) {
+	:root {
+  		--cover-size: 9rem;
+	}
+}
+
+body {
+  background: #111;
+  min-height: 100vh;
+  font-family: sans-serif;
+
+  display: flex;
+  place-items: center;
+}
+
+.cards {
+  list-style: none;
+  overflow: scroll;
+  width: 100%;
+  white-space: nowrap;
+
+  scroll-snap-type: x mandatory;
+  outline: 1px solid #333;
+  background: rgba(0 0 0 / 0.5);
+}
+
+.cards li {
+  display: inline-block;
+  width: var(--cover-size);
+  height: var(--cover-size);
+  scroll-snap-align: center;
+}
+
+.cards li img {
+  dislay: block;
+  width: var(--cover-size);
+  height: var(--cover-size);
+	
+  -webkit-box-reflect: below 0.5em linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.25));
+}
+
+.cards {
+  max-width: calc(var(--cover-size) * 6);
+  margin: 0 auto;
+  padding: calc(var(--cover-size) / 3 * 2) calc(50% - (var(--cover-size) / 3 * 2));
+}
+
+/* Show warning for older browser */
+.warning {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  left: 1em;
+  padding: 1em;
+  border: 1px solid black;
+  z-index: 9999;
+  text-align: center;
+  color: black;
+  background: rgba(255 255 225 / 0.9);
+	display: none;
+}
+
+.warning a {
+  color: blue;
+}
+
+#debug {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+}
+#debug::after {
+  content: " Show Debug";
+  margin-left: 1.5em;
+  color: white;
+  white-space: nowrap;
+}
+
+#debug:checked + .cards {
+  border: 1px solid lime;
+}
+
+#debug:checked + .cards li {
+  text-align: center;
+  color: white;
+  border: 1px solid blue;
+}
+
+#debug:checked + .cards li::before {
+  content: attr(id);
+  display: block;
+  position: absolute;
+  inset: 0;
+  line-height: var(--cover-size);
+  opacity: 0.5;
+}
+
+#debug:checked + .cards li img {
+  opacity: 0.5;
+}
